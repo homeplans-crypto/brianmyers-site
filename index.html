@@ -27,91 +27,103 @@
 </script>
 <style>
   :root {
-    --bg: #f7f5f1;
-    --text: #1f1d1a;
-    --muted: #6b665e;
-    --rule: #ddd8cf;
-    --link: #1d4f7a;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #161513;
-      --text: #ebe7e0;
-      --muted: #a29c92;
-      --rule: #34312c;
-      --link: #8cbbe6;
-    }
+    --text: #ebe7e0; --muted: #a9a297; --rule: rgba(235,231,224,.16); --link: #9cc6ec; --amber: #e2a55c;
+    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font: 18px/1.6 Georgia, "Times New Roman", serif;
-  }
-  main {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 64px 16px 48px;
-  }
-  h1 {
-    font-size: 2.2rem;
-    line-height: 1.15;
-    margin: 0 0 8px;
-    font-weight: normal;
-  }
-  .role {
-    margin: 0 0 40px;
-    color: var(--muted);
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 1rem;
-  }
-  .lead { font-size: 1.3rem; line-height: 1.5; }
-  h2 {
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 600;
-    margin: 48px 0 12px;
-    padding-top: 24px;
-    border-top: 1px solid var(--rule);
-  }
+  html, body { height: 100%; }
+  body { margin: 0; background: #0b0c0e url(plaza.jpg) center / cover no-repeat fixed; color: var(--text);
+    font: 18px/1.6 Georgia, "Times New Roman", serif; overflow: hidden; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
   a { color: var(--link); text-underline-offset: 3px; }
+  button { font: inherit; color: var(--text); background: rgba(12,13,16,.45); border: 1px solid rgba(235,231,224,.3);
+    border-radius: 999px; cursor: pointer; transition: background .25s, border-color .25s; }
+  button:hover { background: rgba(235,231,224,.12); border-color: rgba(235,231,224,.6); }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  /* ---- the front: who he is, and two doors ---- */
+  #front { position: fixed; inset: 0; z-index: 2; display: flex; align-items: center; padding: 6vh 7vw;
+    background: linear-gradient(90deg, rgba(8,9,11,.62), rgba(8,9,11,.18) 58%, rgba(8,9,11,0));
+    transition: opacity 1.1s ease, visibility 0s linear 1.1s; }
+  #front .inner { max-width: 34rem; }
+  #front h1, #profile h1 { font-weight: normal; line-height: 1.12; margin: 0 0 .3em; }
+  #front h1 { font-size: clamp(2.1rem, 5vw, 3.6rem); text-shadow: 0 2px 22px rgba(0,0,0,.7); }
+  .role { margin: 0 0 1.6em; color: var(--muted); font-family: var(--sans); font-size: 1rem; }
+  #front .role { color: #cfc8bc; text-shadow: 0 1px 12px rgba(0,0,0,.8); }
+  #front .lead { font-size: clamp(1.2rem, 2.2vw, 1.5rem); line-height: 1.45; margin: 0 0 2em; text-shadow: 0 1px 16px rgba(0,0,0,.85); text-wrap: balance; }
+  .doors { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .doors button { padding: .7em 1.5em; font-size: 1.02rem; letter-spacing: .03em; }
+  #in-sound { border-color: rgba(226,165,92,.75); }
+  .hint { margin: 1.1em 0 0; font-family: var(--sans); font-size: .82rem; color: #c3bcb0; text-shadow: 0 1px 10px rgba(0,0,0,.9); }
+
+  /* ---- the profile, over the rain ---- */
+  #profile { position: fixed; inset: 0; z-index: 3; overflow-y: auto; padding: 7vh 16px 9vh; opacity: 0; visibility: hidden;
+    transform: translateY(18px); transition: opacity 1s ease .35s, transform 1s ease .35s, visibility 0s linear 1.4s; }
+  #profile main { max-width: 660px; margin: 0 auto; padding: 44px clamp(20px, 5vw, 48px) 36px; background: rgba(13,14,17,.80);
+    -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid rgba(235,231,224,.10); border-radius: 6px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+  @media (min-width: 1100px) { #profile main { margin-left: max(5vw, calc(50vw - 660px)); } }
+  #profile h1 { font-size: 2.1rem; }
+  #profile h1:focus { outline: none; }
+  #profile .lead { font-size: 1.3rem; line-height: 1.5; }
+  h2 { font-family: var(--sans); font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+    font-weight: 600; margin: 44px 0 12px; padding-top: 24px; border-top: 1px solid var(--rule); }
   ol.ledger { list-style: none; margin: 0; padding: 0; }
-  ol.ledger li {
-    display: grid;
-    grid-template-columns: 9rem 1fr;
-    gap: 16px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--rule);
-  }
+  ol.ledger li { display: grid; grid-template-columns: 9rem 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
   ol.ledger li:last-child { border-bottom: 0; }
-  .when {
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-size: 0.9rem;
-    color: var(--muted);
-    padding-top: 3px;
-  }
-  .note { font-size: 0.9rem; color: var(--muted); }
-  footer {
-    margin-top: 48px;
-    padding-top: 24px;
-    border-top: 1px solid var(--rule);
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-  @media (max-width: 520px) {
-    main { padding-top: 40px; }
-    h1 { font-size: 1.8rem; }
+  .when { font-family: var(--sans); font-size: .9rem; color: var(--muted); padding-top: 3px; }
+  .note { font-size: .9rem; color: var(--muted); }
+  footer { margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--rule); font-size: .86rem; color: var(--muted); }
+  footer p { margin: 0 0 .7em; }
+  details summary { cursor: pointer; font-family: var(--sans); font-size: .82rem; letter-spacing: .04em; }
+  details p { margin: .8em 0 0; }
+
+  /* ---- small controls, shown once inside ---- */
+  #tools { position: fixed; top: 16px; right: 16px; z-index: 4; display: flex; gap: 8px; opacity: 0; visibility: hidden; transition: opacity .8s ease 1s; }
+  #tools button { padding: .45em 1em; font-family: var(--sans); font-size: .78rem; letter-spacing: .05em; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  #tools button[aria-pressed=true] { border-color: var(--amber); color: var(--amber); }
+  #now { position: fixed; right: 22px; bottom: 18px; z-index: 4; text-align: right; font-style: italic; font-size: .92rem; text-shadow: 0 1px 8px rgba(0,0,0,.9);
+    opacity: 0; transition: opacity 1.2s ease; pointer-events: none; }
+  #now.show { opacity: .9; }
+  #now small { display: block; font-style: normal; font-family: var(--sans); font-size: .68rem; letter-spacing: .05em; color: #c3bcb0; }
+
+  body.in #front { opacity: 0; visibility: hidden; pointer-events: none; }
+  body.in #profile { opacity: 1; visibility: visible; transform: none; transition-delay: .35s, .35s, 0s; }
+  body.in #tools { opacity: 1; visibility: visible; }
+  body.in.view #profile { opacity: 0; visibility: hidden; transform: translateY(18px); transition-delay: 0s, 0s, 1s; }
+
+  @media (max-width: 640px) {
+    #front { align-items: flex-end; padding: 0 22px 12vh; background: linear-gradient(0deg, rgba(8,9,11,.78), rgba(8,9,11,.25) 62%, rgba(8,9,11,0)); }
+    #profile { padding: 62px 10px 8vh; }
     ol.ledger li { grid-template-columns: 1fr; gap: 2px; }
+    #now { display: none; }
   }
+  @media (prefers-reduced-motion: reduce) { #front, #profile, #tools { transition: none !important; } }
 </style>
+<noscript><style>
+  body { overflow: auto; } canvas, #front, #tools { display: none; }
+  #profile { position: static; opacity: 1; visibility: visible; transform: none; }
+</style></noscript>
 </head>
 <body>
+<canvas id="c" aria-hidden="true"></canvas>
+
+<section id="front" aria-label="Welcome">
+  <div class="inner">
+    <h1>Brian Myers, PMP, <span style="white-space: nowrap">CM-BIM</span></h1>
+    <p class="role">Design technology leader for architecture, engineering and construction</p>
+    <p class="lead">Firms buy technology faster than their people can use it well. I close that gap.</p>
+    <div class="doors">
+      <button id="in-sound" type="button">Step inside</button>
+      <button id="in-quiet" type="button">Enter quietly</button>
+    </div>
+    <p class="hint">Step inside plays rain and Vivaldi, softly.</p>
+  </div>
+</section>
+
+<div id="profile">
 <main>
-  <h1>Brian Myers, PMP, <span style="white-space: nowrap">CM-BIM</span></h1>
+  <h1 tabindex="-1" id="top">Brian Myers, PMP, <span style="white-space: nowrap">CM-BIM</span></h1>
   <p class="role">Design technology leader for architecture, engineering and construction</p>
 
   <p class="lead">Firms buy technology faster than their people can use it well. I close that gap.</p>
@@ -171,7 +183,270 @@
   <h2>Contact</h2>
   <p>The best way to reach me is on <a href="https://www.linkedin.com/in/revit/">LinkedIn</a>.</p>
 
-  <footer>&copy; 2026 Brian Myers</footer>
+  <footer>
+    <p>&copy; 2026 Brian Myers</p>
+    <details>
+      <summary>Credits for this page</summary>
+      <p>Photograph by Brian Myers. The rain, and the sound of it, are generated in your browser.</p>
+      <p>Music: Antonio Vivaldi, <i>The Four Seasons</i>. John Harrison, violin, with the Wichita State University Chamber Players, conducted by Robert Turizziani. Live recording, 2000, used under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0</a> licence. The files were converted to MP3 and are otherwise unchanged.</p>
+    </details>
+  </footer>
 </main>
+</div>
+
+<div id="tools">
+  <button id="sound" type="button" aria-pressed="false">Sound off</button>
+  <button id="view" type="button" aria-pressed="false">Just the rain</button>
+</div>
+<div id="now" aria-live="polite"></div>
+
+<script id="fs" type="x-shader/x-fragment">#version 300 es
+precision highp float;
+uniform sampler2D uImg;
+uniform vec2 uRes;
+uniform float uTime, uRain, uAsp;
+out vec4 outColor;
+
+float N21(vec2 p){ p = fract(p*vec2(123.34,345.45)); p += dot(p,p+34.345); return fract(p.x*p.y); }
+vec3 N13(float p){ vec3 p3 = fract(vec3(p)*vec3(.1031,.11369,.13787)); p3 += dot(p3,p3.yzx+19.19);
+  return fract(vec3((p3.x+p3.y)*p3.z,(p3.x+p3.z)*p3.y,(p3.y+p3.z)*p3.x)); }
+float saw(float b,float t){ return smoothstep(0.,b,t)*smoothstep(1.,b,t); }
+
+// Drops that slide down the pane with a wiggle and leave a beaded trail.
+vec2 dropLayer(vec2 uv,float t){
+  vec2 UV=uv;
+  uv.y+=t*.75;
+  vec2 a=vec2(6.,1.);
+  vec2 grid=a*2.;
+  vec2 id=floor(uv*grid);
+  uv.y+=N21(vec2(id.x,7.31));
+  id=floor(uv*grid);
+  vec3 n=N13(id.x*35.2+id.y*2376.1);
+  vec2 st=fract(uv*grid)-vec2(.5,0.);
+  float x=n.x-.5;
+  float y=UV.y*20.;
+  float wiggle=sin(y+sin(y));
+  x+=wiggle*(.5-abs(x))*(n.z-.5);
+  x*=.7;
+  float ti=fract(t+n.z);
+  y=(saw(.85,ti)-.5)*.9+.5;
+  vec2 p=vec2(x,y);
+  float d=length((st-p)*a.yx);
+  float mainDrop=smoothstep(.4,.0,d);
+  float r=sqrt(smoothstep(1.,y,st.y));
+  float cd=abs(st.x-x);
+  float trail=smoothstep(.23*r,.15*r*r,cd);
+  float trailFront=smoothstep(-.02,.02,st.y-y);
+  trail*=trailFront*r*r;
+  y=UV.y;
+  y=fract(y*10.)+(st.y-.5);
+  float dd=length(st-vec2(x,y));
+  float droplets=smoothstep(.3,0.,dd);
+  return vec2(mainDrop+droplets*r*trailFront,trail);
+}
+float staticDrops(vec2 uv,float t){
+  uv*=40.;
+  vec2 id=floor(uv);
+  uv=fract(uv)-.5;
+  vec3 n=N13(id.x*107.45+id.y*3543.654);
+  vec2 p=(n.xy-.5)*.7;
+  float d=length(uv-p);
+  float fade=saw(.025,fract(t+n.z));
+  return smoothstep(.3,0.,d)*fract(n.z*10.)*fade*step(.4,n.x);
+}
+vec2 drops(vec2 uv,float t,float l0,float l1,float l2){
+  float s=staticDrops(uv,t)*l0;
+  vec2 m1=dropLayer(uv,t)*l1;
+  vec2 m2=dropLayer(uv*1.85,t)*l2;
+  float c=smoothstep(.3,1.,s+m1.x+m2.x);
+  return vec2(c,max(m1.y*l0,m2.y*l1));
+}
+// Rain falling out in the plaza, seen where the light catches it.
+float streaks(vec2 p,float t,float sc,float sp){
+  p.x+=p.y*.07;
+  p*=vec2(sc*46.,sc*1.5);
+  float id=floor(p.x);
+  float h=N21(vec2(id,sc*3.1));
+  p.y+=t*sp*(.75+.5*h)+h*17.;
+  float cell=floor(p.y);
+  float h2=N21(vec2(id*1.7+3.,cell+sc*9.));
+  float fy=fract(p.y), fx=fract(p.x)-.5;
+  float len=.25+.45*h2;
+  float s=smoothstep(0.,.06,fy)*smoothstep(len,len*.5,fy);
+  s*=smoothstep(.16,0.,abs(fx+(h2-.5)*.6));
+  return s*step(.5,h2);
+}
+
+void main(){
+  vec2 uv=vec2(gl_FragCoord.x/uRes.x,1.-gl_FragCoord.y/uRes.y);
+  float sa=uRes.x/uRes.y;
+  vec2 iu=uv;
+  if(sa>uAsp) iu.y=(uv.y-.5)*(uAsp/sa)+.5; else iu.x=(uv.x-.5)*(sa/uAsp)+.5;
+  float z=1.035+.012*sin(uTime*.045);
+  iu=(iu-.5)/z+.5+vec2(.004*sin(uTime*.031),.0028*sin(uTime*.027));
+  float rain=uRain;
+
+  vec2 p=vec2(iu.x*uAsp,1.-iu.y)*1.7;
+  float t=uTime*.16;
+  float l0=smoothstep(-.5,1.,rain)*2.;
+  float l1=smoothstep(.25,.75,rain);
+  float l2=smoothstep(.0,.5,rain);
+  vec2 c=drops(p,t,l0,l1,l2);
+  vec2 e=vec2(.0016,0.);
+  float cx=drops(p+e,t,l0,l1,l2).x;
+  float cy=drops(p+e.yx,t,l0,l1,l2).x;
+  vec2 n=vec2(cx-c.x,cy-c.x);
+  float maxBlur=mix(.3,3.1,rain);
+  float focus=max(0.,mix(maxBlur-c.y*2.2,.15,smoothstep(.1,.2,c.x)));
+  vec2 su=iu+vec2(n.x,-n.y)*.17;
+  vec3 col=textureLod(uImg,su,focus).rgb;
+
+  float lum=dot(col,vec3(.299,.587,.114));
+  col=mix(col,vec3(lum),.28*rain);
+  col*=mix(1.,.80,rain);
+  vec2 rp=vec2(iu.x*uAsp,1.-iu.y);
+  float st=streaks(rp,uTime,1.,2.6)*.55+streaks(rp+3.7,uTime,1.7,3.3)*.4+streaks(rp+9.1,uTime,2.9,4.4)*.28;
+  col+=vec3(.78,.83,.9)*st*rain*.12*(.10+1.5*lum);
+  col+=textureLod(uImg,su,5.5).rgb*rain*.30;   // wet glass spreads each light into a halo
+
+  float v=smoothstep(1.05,.30,length((uv-.5)*vec2(1.08,1.)));
+  col*=mix(.58,1.,v);
+  col=pow(col,vec3(.96));
+  col+=(N21(gl_FragCoord.xy+fract(uTime)*91.7)-.5)*.022;
+  outColor=vec4(col,1.);
+}
+</script>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const canvas = $('c');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const RAIN = .72;
+
+  // ---------- the picture ----------
+  const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, powerPreference: 'low-power' });
+  function noGL() { canvas.style.display = 'none'; }   // the photograph is already the page background
+  if (gl) {
+    try {
+      const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+      const prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, '#version 300 es\nin vec2 a;void main(){gl_Position=vec4(a,0.,1.);}'));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, $('fs').textContent));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      const U = n => gl.getUniformLocation(prog, n);
+      const u = { res: U('uRes'), time: U('uTime'), rain: U('uRain'), asp: U('uAsp') };
+      canvas.style.opacity = 0; canvas.style.transition = 'opacity 1.2s ease';
+
+      const resize = () => {
+        const small = innerWidth < 700;
+        const dpr = Math.min(window.devicePixelRatio || 1, small ? 1.25 : 1.5);
+        let w = Math.round(innerWidth * dpr), h = Math.round(innerHeight * dpr);
+        const cap = 1920; if (w > cap) { h = Math.round(h * cap / w); w = cap; }
+        if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); return true; }
+        return false;
+      };
+      const t0 = performance.now();
+      let fixedTime = null; window.__setTime = t => { fixedTime = t; };
+      const draw = () => {
+        gl.uniform2f(u.res, canvas.width, canvas.height);
+        gl.uniform1f(u.time, fixedTime ?? (still ? 47 : (performance.now() - t0) / 1000 + 40));
+        gl.uniform1f(u.rain, RAIN);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      };
+      const frame = () => { resize(); draw(); requestAnimationFrame(frame); };
+
+      const im = new Image();
+      im.onload = () => {
+        gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.generateMipmap(gl.TEXTURE_2D); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.uniform1i(U('uImg'), 0); gl.uniform1f(u.asp, im.naturalWidth / im.naturalHeight);
+        canvas.style.opacity = 1; window.__ready = true;
+        if (still) { resize(); draw(); addEventListener('resize', () => { resize(); draw(); }); }
+        else frame();
+      };
+      im.onerror = noGL;
+      im.src = 'plaza.jpg';
+    } catch (e) { console.error(e); noGL(); }
+  } else noGL();
+
+  // ---------- sound: rain is synthesized, the music is a recording ----------
+  let ac, master, noiseBuf, started = false, on = false, vEl = null, vPos = 0, nowT;
+  const TRACKS = [['Spring','I. Allegro'],['Spring','II. Largo'],['Spring','III. Allegro pastorale'],['Summer','I. Allegro non molto'],['Summer','II. Adagio'],['Summer','III. Presto'],
+    ['Autumn','I. Allegro'],['Autumn','II. Adagio molto'],['Autumn','III. Allegro'],['Winter','I. Allegro non molto'],['Winter','II. Largo'],['Winter','III. Allegro']];
+  const ORDER = [10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];   // opens on the Largo from Winter, then the whole work
+  const MUSIC = .33, RAIN_QUIET = .05, RAIN_FULL = .30;
+  const rainLevel = () => document.body.classList.contains('view') ? RAIN_FULL : RAIN_QUIET;   // the rain is barely there until someone chooses to listen to it
+
+  const filt = (type, f, q) => { const b = ac.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q) b.Q.value = q; return b; };
+  const gain = v => { const g = ac.createGain(); g.gain.value = v; return g; };
+  const chain = (...n) => { for (let i = 0; i < n.length - 1; i++) n[i].connect(n[i + 1]); return n[n.length - 1]; };
+  const noiseSrc = off => { const s = ac.createBufferSource(); s.buffer = noiseBuf; s.loop = true; s.start(0, off); return s; };
+
+  function showNow(html) { const n = $('now'); n.innerHTML = html; n.classList.add('show'); clearTimeout(nowT); nowT = setTimeout(() => n.classList.remove('show'), 9000); }
+  function playV() {
+    const i = ORDER[vPos], [season, mv] = TRACKS[i];
+    vEl.src = 'audio/' + String(i + 1).padStart(2, '0') + '.mp3';
+    vEl.volume = MUSIC;
+    vEl.play().catch(() => {});
+    showNow(season + ' · ' + mv + '<small>Vivaldi, The Four Seasons · John Harrison, violin</small>');
+  }
+  function startSound() {
+    if (started) return; started = true;
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    noiseBuf = ac.createBuffer(2, ac.sampleRate * 7, ac.sampleRate);
+    for (let ch = 0; ch < 2; ch++) { const d = noiseBuf.getChannelData(ch); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    master = gain(0); master.connect(ac.destination);
+    master.gain.setTargetAtTime(rainLevel(), ac.currentTime, 1.5);
+    chain(noiseSrc(0), filt('highpass', 420), filt('lowpass', 5200), gain(.20), master);
+    chain(noiseSrc(2.3), filt('bandpass', 240, .6), gain(.50), master);
+    chain(noiseSrc(4.1), filt('lowpass', 110), gain(.40), master);
+    const hiss = gain(.05); chain(noiseSrc(1.2), filt('highpass', 2600), filt('lowpass', 8000), hiss, master);
+    const lfo = ac.createOscillator(); lfo.frequency.value = .07; chain(lfo, gain(.035), hiss.gain); lfo.start();
+    setInterval(() => {   // single drops ticking on the glass
+      if (!on || Math.random() > .6) return;
+      const now = ac.currentTime, s = ac.createBufferSource(); s.buffer = noiseBuf;
+      const g = gain(0), pan = ac.createStereoPanner(); pan.pan.value = Math.random() * 1.6 - .8;
+      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(.05 + Math.random() * .12, now + .004); g.gain.exponentialRampToValueAtTime(.0001, now + .05 + Math.random() * .05);
+      chain(s, filt('bandpass', 900 + Math.random() * 3200, 6 + Math.random() * 8), g, pan, master); s.start(now, Math.random() * 6, .15);
+    }, 110);
+    vEl = new Audio(); vEl.preload = 'auto';
+    vEl.addEventListener('ended', () => { vPos = (vPos + 1) % ORDER.length; playV(); });
+    playV();
+    document.addEventListener('visibilitychange', () => { if (on && !document.hidden && ac.state === 'suspended') ac.resume(); });
+  }
+  function setSound(want) {
+    on = want;
+    if (want) { if (!started) startSound(); else { ac.resume(); vEl.play().catch(() => {}); } }
+    else if (started) { ac.suspend(); vEl.pause(); $('now').classList.remove('show'); }
+    $('sound').setAttribute('aria-pressed', want); $('sound').textContent = want ? 'Sound on' : 'Sound off';
+  }
+
+  // ---------- the two doors ----------
+  function enter(withSound) {
+    document.body.classList.add('in');
+    if (withSound) { try { setSound(true); } catch (e) { console.error(e); } }
+    setTimeout(() => $('top').focus({ preventScroll: true }), 900);
+  }
+  $('in-sound').addEventListener('click', () => enter(true));
+  $('in-quiet').addEventListener('click', () => enter(false));
+  $('sound').addEventListener('click', () => { try { setSound(!on); } catch (e) { console.error(e); } });
+  $('view').addEventListener('click', e => {
+    const v = document.body.classList.toggle('view');
+    e.currentTarget.setAttribute('aria-pressed', v); e.currentTarget.textContent = v ? 'Back to profile' : 'Just the rain';
+    if (started) master.gain.setTargetAtTime(rainLevel(), ac.currentTime, .9);
+  });
+})();
+</script>
 </body>
 </html>
